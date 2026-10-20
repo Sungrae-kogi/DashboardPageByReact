@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,26 +10,34 @@ import TableRow from "@mui/material/TableRow";
 *
 */
 
-function WorkShopStatus() {
+const STATUS_COLORS = {
+    "대상전": 'text.secondary',
+    "진행완": 'success.main',
+    "임박": 'warning.main',
+    "지연": 'error.main',
+};
 
-    const [projectProgressRowData, setProjectProgressRowData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        async function LoadProjectProgressRowData() {
-            try {
-                setIsLoading(true);
-                const response = await axios.get("/api/projects/progress");
-                setProjectProgressRowData(response.data);
-            } catch (error) {
-                console.error("프로젝트 데이터 조회 실패:", error);
-            } finally {
-                // 성공 실패 여부와 상관없이 로딩 상태를 false로 변경
-                setIsLoading(false);
-            }
-        }
-        LoadProjectProgressRowData();
-    }, []);
+function WorkShopStatus({ projectProgressRowData, isLoading }) {
+
+    // const [projectProgressRowData, setProjectProgressRowData] = useState([]);
+    // const [isLoading, setIsLoading] = useState(true);
+
+    // useEffect(() => {
+    //     async function LoadProjectProgressRowData() {
+    //         try {
+    //             setIsLoading(true);
+    //             const response = await axios.get("/api/projects/progress");
+    //             setProjectProgressRowData(response.data);
+    //         } catch (error) {
+    //             console.error("프로젝트 데이터 조회 실패:", error);
+    //         } finally {
+    //             // 성공 실패 여부와 상관없이 로딩 상태를 false로 변경
+    //             setIsLoading(false);
+    //         }
+    //     }
+    //     LoadProjectProgressRowData();
+    // }, []);
 
 
     return (
@@ -79,13 +85,13 @@ function WorkShopStatus() {
                             <TableCell title={row.projectName}>
                                 {row.projectName}
                             </TableCell>
-                            <TableCell title={row.stage1Status}>
+                            <TableCell title={row.stage1Status} sx={{ color: STATUS_COLORS[row.stage1Status] }}>
                                 {row.stage1Status}
                             </TableCell>
-                            <TableCell title={row.stage2Status}>
+                            <TableCell title={row.stage2Status} sx={{ color: STATUS_COLORS[row.stage2Status] }}>
                                 {row.stage2Status}
                             </TableCell>
-                            <TableCell title={row.stage3Status}>
+                            <TableCell title={row.stage3Status} sx={{ color: STATUS_COLORS[row.stage3Status] }}>
                                 {row.stage3Status}
                             </TableCell>
                         </TableRow>

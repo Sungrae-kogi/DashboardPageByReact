@@ -9,8 +9,9 @@ import Button from "@mui/material/Button"
 import MenuItem from "@mui/material/MenuItem"
 import Select from "@mui/material/Select"
 import axios from 'axios'
+import WorkShopSection from './components/WorkShopSection'
 import './App.css'
-import WorkShopStatus from './components/WorkShopStatus'
+
 
 function App() {
   const [points, setPoints] = useState([])
@@ -184,7 +185,7 @@ function App() {
 
         </Grid>
         <Grid size={3} style={{ border: "1px solid black" }}>
-          <WorkShopStatus />
+          <WorkShopSection />
         </Grid>
       </Grid>
       <ProjectDetailDialog
