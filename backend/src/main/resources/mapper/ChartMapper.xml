@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 어떤 인터페이스와 매칭인지 연결 (풀 패키지 경로)-->
+<mapper namespace="local.offline.backend.mapper.ChartMapper">
+    <!-- 메서드 이름(id) 과 반환 타입(resultType) 연결-->
+    <select id="selectSalesData" resultType="local.offline.backend.domain.ChartPoint"> SELECT
+        sales_date AS label, sales_amount AS value, order_count AS cnt FROM daily_sales ORDER BY
+        sales_date ASC </select>
+</mapper>

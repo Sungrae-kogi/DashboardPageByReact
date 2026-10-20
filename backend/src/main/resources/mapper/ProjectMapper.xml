@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="local.offline.backend.mapper.ProjectMapper">
+    <select id="selectProjects" resultType="local.offline.backend.domain.ProjectGridRow"> SELECT
+        project_id AS projectId, project_name AS projectName, status, start_date AS startDate,
+        end_date AS endDate FROM project ORDER BY project_id </select>
+
+    <select id="selectProjectProgressRows"
+        resultType="local.offline.backend.domain.ProjectProgressRow"> SELECT p.project_id AS
+        projectId, p.project_name AS projectName, MAX(CASE WHEN ps.stage_no = 1 THEN ps.status END)
+        AS stage1Status, MAX(CASE WHEN ps.stage_no = 2 THEN ps.status END) AS stage2Status, MAX(CASE
+        WHEN ps.stage_no = 3 THEN ps.status END) AS stage3Status FROM project p LEFT JOIN
+        project_stage ps ON p.project_id = ps.project_id GROUP BY p.project_id, p.project_name ORDER
+        BY p.project_id </select>
+</mapper>

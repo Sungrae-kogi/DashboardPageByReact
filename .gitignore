@@ -1,0 +1,64 @@
+# ==========================================
+# Dependencies & Package Managers
+# ==========================================
+node_modules/
+package-lock.json
+*.local
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ==========================================
+# Frontend (React + Vite + Node)
+# ==========================================
+dist/
+dist-ssr/
+frontend/dist/
+frontend/dist-ssr/
+
+# ==========================================
+# Backend (Java + Spring Boot + Gradle)
+# ==========================================
+.gradle/
+build/
+out/
+backend/.gradle/
+backend/build/
+backend/out/
+!backend/gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.class
+*.jar
+*.war
+
+# ==========================================
+# Offline Tools & Binary Caches (600MB+)
+# ==========================================
+offline-lab/
+
+# ==========================================
+# Logs
+# ==========================================
+*.log
+logs/
+
+# ==========================================
+# IDE & Tooling
+# ==========================================
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.settings/
+.project
+.classpath
+
+# ==========================================
+# OS junk
+# ==========================================
+.DS_Store
+Thumbs.db

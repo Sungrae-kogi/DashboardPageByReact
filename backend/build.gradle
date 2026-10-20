@@ -1,0 +1,55 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath(
+            'org.springframework.boot:' +
+            'spring-boot-gradle-plugin:3.5.16'
+        )
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+group = 'local.offline'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion =
+            JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(
+        'org.springframework.boot:' +
+        'spring-boot-starter-web:3.5.16'
+    )
+
+    implementation(
+        'org.mybatis.spring.boot:' + 'mybatis-spring-boot-starter:3.0.4'
+    )
+
+    runtimeOnly(
+        'org.mariadb.jdbc:' + 'mariadb-java-client:3.5.10'
+    )
+
+    testImplementation(
+        'org.springframework.boot:' +
+        'spring-boot-starter-test:3.5.16'
+    )
+    
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
