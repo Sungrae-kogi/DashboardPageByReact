@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import local.offline.backend.application.ChartDataService;
 import local.offline.backend.domain.ChartPoint;
+import local.offline.backend.domain.VELLState;
 
 @RestController
 @RequestMapping("/api/chart")
@@ -21,5 +22,11 @@ public class ChartDataController {
     @GetMapping("/sales")
     public List<ChartPoint> getSalesData() {
         return chartDataService.getSalesData();
+    }
+
+    @GetMapping("/vell")
+    public List<VELLState> getVellStates() {
+        return chartDataService.getVellStates();
+
     }
 }

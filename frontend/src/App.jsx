@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
-import { Chart, Subtitle, Tooltip } from '@highcharts/react'
+import { Chart, Subtitle, Tooltip, XAxis } from '@highcharts/react'
 import ProjectGridTable, { columns } from './components/ProjectGridTable'
 import ProjectDetailDialog from './components/ProjectDetailDialog'
 import Grid from "@mui/material/Grid"
@@ -15,6 +15,7 @@ import './App.css'
 
 function App() {
   const [points, setPoints] = useState([])
+  const [vellPoints, setVellPoints] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
@@ -25,6 +26,11 @@ function App() {
   // const [searchTarget, setSearchTarget] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [appliedKeyword, setAppliedKeyword] = useState('');
+
+  // 보여줄 차트 기본 : Phase
+  const [selectedGroup, setSelectedGroup] = useState('Phase');
+  // 탭 버튼 목록
+  const groupType = ['Phase', '등급', '본부'];
 
   /**
    * useEffect()는 기본적으로 렌더링 직후 실행
@@ -37,6 +43,7 @@ function App() {
    * 
    */
 
+  // 판매량 차트
   useEffect(() => {
     async function loadCharData() {
       try {
@@ -53,7 +60,25 @@ function App() {
     loadCharData()
   }, [])    // 설정한 함수를 컴포넌트가 화면에 처음 렌더링 될 때만 실행하고, 업데이트 때는 실행하지 않으려면 함수의 두 번째 파라미터로 빈 배열[]을 전달합니다.
 
-  const chartOptions = useMemo(() => {
+
+  // VELL 현황 차트
+  useEffect(() => {
+    async function loadVELLState() {
+      try {
+        const response = await axios.get('/api/chart/vell')
+
+        setVellPoints(response.data)
+      } catch (error) {
+        const message = axios.isAxiosError(error) ? error.message : '알 수 없는 오류가 발생했습니다.'
+        setError(message)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadVELLState()
+  }, [])
+
+  const chartOptionsForWeeklySales = useMemo(() => {
     return {
       chart: {
         type: 'column',
@@ -94,6 +119,42 @@ function App() {
     }
   }, [points])
 
+  // 하단 차트
+  // api 응답은 (Phase, 등급, 본부) 3가지 타입 데이터를 한번에 전달 -> 이후 전환버튼을 통해 Type을 전환하여 차트를 전환
+  // 구현 방법 -> 선택된 상태에 따라 useMemo로 필터링 하여 단 하나의 차트를 전달하는것이 (딜레이가 x)
+  // 차트 컴포넌트를 3개를 미리 만들었다가 숨기고 띄우고 하는게 아니라 차트는 1개만 두고 options 만 바꾸는식.
+  const chartOptionsForVELL = useMemo(() => {
+
+    const filteredData = vellPoints.filter(point => point.groupType === selectedGroup);
+
+    return {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: `VELL 등록 현황 - ${selectedGroup}`
+      },
+      xAxis: {
+        categories: filteredData.map((vellPoint) => vellPoint.itemName),
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: '건수 / 값'
+        }
+      },
+      series: [
+        {
+          name: selectedGroup,
+          data: filteredData.map(item => item.metricValue),
+          tooltip: {
+            pointFormat: '<b>{series.name} ({point.key}): {point.y}</b>'
+          }
+        }
+      ]
+    }
+  }, [vellPoints, selectedGroup]);  // 
+
   const handleSearch = () => {
     setAppliedKeyword(searchKeyword.trim());
     setAppliedSearchKeyword(selectedSearchKeyword);
@@ -108,7 +169,7 @@ function App() {
           {isLoading && <p>차트 데이터를 불러오는 중입니다.</p>}
           {!isLoading && error && <p>{error}</p>}
           {!isLoading && !error && (
-            <Chart options={chartOptions} />
+            <Chart options={chartOptionsForWeeklySales} />
           )}
         </Grid>
 
@@ -181,8 +242,24 @@ function App() {
           </Box>
         </Grid>
         <Grid size={3} style={{ border: "1px solid black" }}></Grid>
-        <Grid size={6} style={{ border: "1px solid black", height: "50vh" }}>
+        <Grid size={6} style={{ border: "1px solid black" }}>
+          <Box sx={{ my: 2 }}>
+            <Box sx={{ display: 'flex', gap: 1, mb: 2, ml: 1 }}>
+              {groupType.map(group => (
+                <Button key={group} variant={selectedGroup === group ? 'contained' : 'outlined'}
+                  onClick={() => setSelectedGroup(group)}>
+                  {group}
+                </Button>
+              ))}
+            </Box>
+            {isLoading && <p>차트 데이터를 불러오는 중입니다.</p>}
+            {!isLoading && error && <p>{error}</p>}
+            {!isLoading && !error && (
+              <Chart options={chartOptionsForVELL} >
 
+              </Chart>
+            )}
+          </Box>
         </Grid>
         <Grid size={3} style={{ border: "1px solid black" }}>
           <WorkShopSection />

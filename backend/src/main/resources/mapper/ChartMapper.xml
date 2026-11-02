@@ -7,4 +7,8 @@
     <select id="selectSalesData" resultType="local.offline.backend.domain.ChartPoint"> SELECT
         sales_date AS label, sales_amount AS value, order_count AS cnt FROM daily_sales ORDER BY
         sales_date ASC </select>
+
+    <select id="selectVellStates" resultType="local.offline.backend.domain.VELLState"> SELECT
+        group_type AS groupType, item_name AS itemName, metric_value AS metricValue FROM
+        performance_summary </select>
 </mapper>

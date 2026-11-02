@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import local.offline.backend.domain.ChartPoint;
+import local.offline.backend.domain.VELLState;
 import local.offline.backend.mapper.ChartMapper;
 
 @Service
@@ -17,5 +18,9 @@ public class ChartDataService {
 
     public List<ChartPoint> getSalesData() {
         return chartMapper.selectSalesData();
+    }
+
+    public List<VELLState> getVellStates() {
+        return chartMapper.selectVellStates();
     }
 }
