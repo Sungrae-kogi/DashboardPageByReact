@@ -4,21 +4,23 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
+import { STATUS_COLORS } from "../constants/workShopStatusColors";
+
 /*
 *   초기 상태
 *   우측 하단 WorkShop 차수 별 보고서 진행 현황
 *
 */
 
-const STATUS_COLORS = {
-    "대상전": 'text.secondary',
-    "진행완": 'success.main',
-    "임박": 'warning.main',
-    "지연": 'error.main',
-};
+// const STATUS_COLORS = {
+//     "대상전": 'text.secondary',
+//     "진행완": 'success.main',
+//     "임박": 'warning.main',
+//     "지연": 'error.main',
+// };
 
 
-function WorkShopStatus({ projectProgressRowData, isLoading }) {
+function WorkShopStatus({ projectProgressRowData, isLoading, onRowSelect }) {
 
     // const [projectProgressRowData, setProjectProgressRowData] = useState([]);
     // const [isLoading, setIsLoading] = useState(true);
@@ -44,6 +46,7 @@ function WorkShopStatus({ projectProgressRowData, isLoading }) {
         <Table
             size="small"
             aria-label="프로젝트 차수별 진행 현황"
+            onClick={() => onRowSelect()}
             sx={{
                 width: "100%",
                 height: "50%",
@@ -59,6 +62,10 @@ function WorkShopStatus({ projectProgressRowData, isLoading }) {
                 "& .MuiTableCell-head": {
                     backgroundColor: "#f1f3f5",
                     borderBottom: "1px solid #dee2e6",
+                },
+                "& .MuiTableRow-root:hover": {
+                    backgroundColor: "#f5f5f5",
+                    cursor: "pointer",
                 },
             }}
         >
